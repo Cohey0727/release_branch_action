@@ -31,11 +31,11 @@ jobs:
           VERSION_ELEMENTS=( ${CURRENT_VERSION//[.|-]/ } )
 
           if [ $VERSION_UP_TYPE = "Major" ]; then
-            export NEXT_VERSION=$((VERSION_ELEMENTS[0]+1)).0.0
+            NEXT_VERSION=$((VERSION_ELEMENTS[0]+1)).0.0
           elif [ $VERSION_UP_TYPE = "Minor" ]; then
-            export NEXT_VERSION=$((VERSION_ELEMENTS[0])).$((VERSION_ELEMENTS[1]+1)).0
+            NEXT_VERSION=$((VERSION_ELEMENTS[0])).$((VERSION_ELEMENTS[1]+1)).0
           elif [ $VERSION_UP_TYPE = "Patch" ]; then
-            export NEXT_VERSION=$((VERSION_ELEMENTS[0])).$((VERSION_ELEMENTS[1])).$((VERSION_ELEMENTS[2]+1))
+            NEXT_VERSION=$((VERSION_ELEMENTS[0])).$((VERSION_ELEMENTS[1])).$((VERSION_ELEMENTS[2]+1))
           fi
 
           echo "Current version is $CURRENT_VERSION"
@@ -43,7 +43,7 @@ jobs:
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
           echo "next_version=$NEXT_VERSION" >> $GITHUB_ENV
       - name: Create Release Branch
-        run: git checkout -b release/$NEXT_VERSION
+        run: git checkout -b release/${env.next_version}
       - name: Replace Version Name And Commit
         run: |
           sed -i '' -e 's/^version: ${env.current_version}$/version: ${env.next_version}/' version.txt
