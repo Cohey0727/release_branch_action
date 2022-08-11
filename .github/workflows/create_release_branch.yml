@@ -18,9 +18,12 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Initialize mandatory git config
+      - name: Initialize git config
         run: |
           git config user.name "GitHub Actions"
           git config user.email noreply@github.com
+          git checkout main
       - name: Determine Version Name
-        run: git checkout -b release/v${{ github.event.inputs.versionName }}
+        run: |
+          CURRENT_VERSION=`git describe`
+          echo $CURRENT_VERSION
