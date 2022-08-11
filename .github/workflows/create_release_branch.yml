@@ -40,11 +40,13 @@ jobs:
 
           echo "Current version is $CURRENT_VERSION"
           echo "Next version is $NEXT_VERSION"
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
+          echo "next_version=$NEXT_VERSION" >> $GITHUB_ENV
       - name: Create Release Branch
         run: git checkout -b release/$NEXT_VERSION
       - name: Replace Version Name And Commit
         run: |
-          sed -i '' -e 's/^version: ${CURRENT_VERSION}$/version: ${NEXT_VERSION}/' version.txt
+          sed -i '' -e 's/^version: ${env.current_version}$/version: ${env.next_version}/' version.txt
           git add version.txt
-          git commit -m "Generate New Release Branch release/$NEXT_VERSION"
-          git push origin release/$NEXT_VERSION
+          git commit -m "Generate New Release Branch release/${env.current_version}"
+          git push origin release/${env.current_version}
