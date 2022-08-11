@@ -29,10 +29,10 @@ jobs:
           CURRENT_VERSION=`git describe --tags --abbrev=0`
           echo "Current version is $CURRENT_VERSION"
           VERSION_UP_TYPE=${{ github.event.inputs.VersionUpType }}
-          if ["VERSION_UP_TYPE" = "Major"]; then
+          if ["$VERSION_UP_TYPE" = "Major"]; then
             echo "Major Hello"
-          elif ["VERSION_UP_TYPE" = "Minor"]; then
+          elif ["$VERSION_UP_TYPE" = "Minor"]; then
             echo "Minor Hello"
-          elif ["VERSION_UP_TYPE" = "Patch"]; then
+          elif ["$VERSION_UP_TYPE" = "Patch"]; then
             echo "Patch Hello"
           fi
