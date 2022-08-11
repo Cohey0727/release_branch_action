@@ -2,9 +2,15 @@ name: Create Release Branch
 on:
   workflow_dispatch:
     inputs:
-      versionName:
-        description: "Name of version  (ie 1.0.0)"
-        required: true
+      VersionUpType:
+        description: "Version Up Type"
+        default: Major
+        type: choice
+        options:
+          - Major
+          - Minor
+          - Patch
+
 jobs:
   createrelease:
     runs-on: ubuntu-latest
