@@ -18,16 +18,16 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Increment Version Tag
-          run: |
-            #!/bin/bash
-            set -e
+      # - name: Increment Version Tag
+      #     run: |
+      #       #!/bin/bash
+      #       set -e
 
-            # Find and increment the version number.
-            perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.($2+1)/e' version.txt
+      #       # Find and increment the version number.
+      #       perl -i -pe 's/^(version:\s+\d+\.\d+\.\d+\+)(\d+)$/$1.($2+1)/e' version.txt
 
-            # Commit and tag this change.
-            version=`grep 'version: ' version.txt | sed 's/version: //'`
-            git add version.txt
-            git commit -m "Bump version to $version" version.txt
-            git tag $version
+      #       # Commit and tag this change.
+      #       version=`grep 'version: ' version.txt | sed 's/version: //'`
+      #       git add version.txt
+      #       git commit -m "Bump version to $version" version.txt
+      #       git tag $version
