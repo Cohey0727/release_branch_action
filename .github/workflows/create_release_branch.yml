@@ -31,11 +31,11 @@ jobs:
           VERSION_ELEMENTS=( ${CURRENT_VERSION//[.|-]/ } )
 
           if [ $VERSION_UP_TYPE = "Major" ]; then
-            NEXT_VERSION=$((VERSION_ELEMENTS[0]+1)).0.0
+            export NEXT_VERSION=$((VERSION_ELEMENTS[0]+1)).0.0
           elif [ $VERSION_UP_TYPE = "Minor" ]; then
-            NEXT_VERSION=$((VERSION_ELEMENTS[0])).$((VERSION_ELEMENTS[1]+1)).0
+            export NEXT_VERSION=$((VERSION_ELEMENTS[0])).$((VERSION_ELEMENTS[1]+1)).0
           elif [ $VERSION_UP_TYPE = "Patch" ]; then
-            NEXT_VERSION=$((VERSION_ELEMENTS[0])).$((VERSION_ELEMENTS[1])).$((VERSION_ELEMENTS[2]+1))
+            export NEXT_VERSION=$((VERSION_ELEMENTS[0])).$((VERSION_ELEMENTS[1])).$((VERSION_ELEMENTS[2]+1))
           fi
 
           echo "Current version is $CURRENT_VERSION"
