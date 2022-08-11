@@ -22,5 +22,6 @@ jobs:
         run: git checkout -b release/v${{ github.event.inputs.versionName }}
       - name: Initialize mandatory git config
         run: |
+          echo "Hello"
           git config user.name "GitHub Actions"
           git config user.email noreply@github.com
