@@ -4,8 +4,9 @@ on:
     inputs:
       VersionUpType:
         description: "Version Up Type"
-        default: Major
+        default: Minor
         type: choice
+        required: true
         options:
           - Major
           - Minor
