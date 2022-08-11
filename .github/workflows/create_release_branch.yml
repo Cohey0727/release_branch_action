@@ -27,10 +27,11 @@ jobs:
       - name: Determine Next Version Name
         run: |
           CURRENT_VERSION=`git describe --tags --abbrev=0`
-          echo $CURRENT_VERSION
-      - name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Test
-        run: |
-          echo $RELEASE_VERSION
-          echo ${{ env.RELEASE_VERSION }}
+          echo "Current version is $CURRENT_VERSION"
+          if [${{ github.event.inputs.versionCode }} = "Major"]; then
+            echo "Major Hello"
+          elif [${{ github.event.inputs.versionCode }} = "Minor"]; then
+            echo "Minor Hello"
+          elif [${{ github.event.inputs.versionCode }} = "Patch"]; then
+            echo "Patch Hello"
+          fi
