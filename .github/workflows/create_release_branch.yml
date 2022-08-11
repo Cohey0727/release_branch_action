@@ -40,3 +40,11 @@ jobs:
 
           echo "Current version is $CURRENT_VERSION"
           echo "Next version is $NEXT_VERSION"
+      - name: Create Release Branch
+        run: git checkout -b release/$NEXT_VERSION
+      - name: Replace Version Name And Commit
+        run: |
+          sed -i '' -e 's/^version: ${CURRENT_VERSION}$/version: ${NEXT_VERSION}/' version.txt
+          git add version.txt
+          git commit -m "Generate New Release Branch release/$NEXT_VERSION"
+          git push origin release/$NEXT_VERSION
