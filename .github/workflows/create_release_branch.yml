@@ -1,0 +1,13 @@
+name: Create Release Branch
+on:
+  workflow_dispatch:
+    inputs:
+      versionName:
+        description: "Name of version  (ie 1.0.0)"
+        required: true
+jobs:
+  createrelease:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
