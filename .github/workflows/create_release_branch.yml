@@ -26,5 +26,5 @@ jobs:
           git pull --tags
       - name: Determine Next Version Name
         run: |
-          CURRENT_VERSION=`git describe --always --tags                `
+          CURRENT_VERSION=`git describe --always --tags`
           echo $CURRENT_VERSION
