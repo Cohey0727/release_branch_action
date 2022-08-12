@@ -46,7 +46,6 @@ jobs:
       - name: Change Version Name And Commit
         run: |
           git checkout -b release/${{ env.next_version }}
-          git merge production
           sed -i'' -e 's/^version: ${{ env.current_version }}$/version: ${{ env.next_version }}/' ./version.txt
           git add version.txt
           git commit -m "Generate New Release Branch release/${{ env.next_version }}"
