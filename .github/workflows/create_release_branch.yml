@@ -43,13 +43,10 @@ jobs:
           echo "Next version is $NEXT_VERSION"
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
           echo "next_version=$NEXT_VERSION" >> $GITHUB_ENV
-      - name: Create Release Branch
+      - name: Change Version Name And Commit
         run: |
-          git checkout -b release/${{ env.next_version }}-alpha
-          git checkout -b release/${{ env.next_version }}-beta
+          git checkout -b release/${{ env.next_version }}
           git merge production
-      - name: Replace Version Name And Commit
-        run: |
           sed -i'' -e 's/^version: ${{ env.current_version }}$/version: ${{ env.next_version }}/' ./version.txt
           git add version.txt
           git commit -m "Generate New Release Branch release/${{ env.next_version }}"
