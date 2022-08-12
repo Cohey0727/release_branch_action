@@ -8,31 +8,30 @@ jobs:
         uses: actions/checkout@v2
       - name: Initialize Git
         run: |
-          echo '1' $GITHUB_REF
-          echo '2' ${{ github.ref }}
-          echo '3' ${{ github.ref_name }}
-          echo '4' ${{ github.head_ref }}
-          echo '5' ${{ github.base_ref }}
-      # - name: Determine Next Version Name
-      #   run: |
-      #     CURRENT_BRANCH=${{github.head_ref}}
-      #     NEXT_VERSION=`echo $CURRENT_BRANCH | tr -d release/ | tr -d hotfix/`
-      #     echo "next_version=$NEXT_VERSION" >> $GITHUB_ENV
-      # - name: Change Version Name And Commit
-      #   env:
-      #     NEXT_VERSION: ${{ env.next_version }}
-      #   run: |
-      #     TODAY=`date '+%Y/%m/%d'`
-      #     CURRENT_BRANCH=${{github.head_ref}}
-      #     NEXT_VERSION= ${{ env.next_version }}
-      #     git tag -a $NEXT_VERSION -m "close $CURRENT_BRANCH with tag:$NEXT_VERSION at $TODAY"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull
+          git fetch --prune --unshallow
+      - name: Determine Next Version Name
+        run: |
+          CURRENT_BRANCH=${{ github.ref_name }}
+          NEXT_VERSION=`echo $CURRENT_BRANCH | tr -d release/ | tr -d hotfix/`
+          echo "next_version=$NEXT_VERSION" >> $GITHUB_ENV
+      - name: Change Version Name And Commit
+        env:
+          NEXT_VERSION: ${{ env.next_version }}
+        run: |
+          TODAY=`date '+%Y/%m/%d'`
+          CURRENT_BRANCH=${{ github.ref_name }}
+          NEXT_VERSION= ${{ env.next_version }}
+          git tag -a $NEXT_VERSION -m "close $CURRENT_BRANCH with tag:$NEXT_VERSION at $TODAY"
 
-      #     # production branch
-      #     git checkout origin/production
-      #     git merge $CURRENT_BRANCH --no-ff --no-edit
-      #     git push origin/production
+          # production branch
+          git checkout origin/production
+          git merge $CURRENT_BRANCH --no-ff --no-edit
+          git push origin/production
 
-      #     # main branch
-      #     git checkout origin/main
-      #     git merge $CURRENT_BRANCH --no-ff --no-edit
-      #     git push origin/main
+          # main branch
+          git checkout origin/main
+          git merge $CURRENT_BRANCH --no-ff --no-edit
+          git push origin/main
