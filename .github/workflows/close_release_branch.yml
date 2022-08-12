@@ -23,7 +23,6 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git pull
           git fetch --prune --unshallow
       - name: Determine Next Version Name
         run: |
@@ -44,10 +43,7 @@ jobs:
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
           echo "next_version=$NEXT_VERSION" >> $GITHUB_ENV
       - name: Create Release Branch
-        run: |
-          git checkout -b release/${{ env.next_version }}-alpha
-          git checkout -b release/${{ env.next_version }}-beta
-          git merge production
+        run: git checkout -b release/${{ env.next_version }}
       - name: Replace Version Name And Commit
         run: |
           sed -i'' -e 's/^version: ${{ env.current_version }}$/version: ${{ env.next_version }}/' ./version.txt
