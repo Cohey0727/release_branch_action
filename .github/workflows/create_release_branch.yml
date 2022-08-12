@@ -49,6 +49,8 @@ jobs:
           # CURRENT_VERSION=${{ env.current_version }}
           # NEXT_VERSION=${{ env.next_version }}
           ls
+          echo Hello0
+          sed -i '' -e 's/^version\:\ 1.0.1$/version\:\ 1.5.0/' ./version.txt
           echo Hello1
           sed -i '' -e "s/^version: 1.0.1$/version: 1.5.0/" ./version.txt
           echo Hello2
