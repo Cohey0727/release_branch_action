@@ -1,20 +1,10 @@
-name: Create Release Branch
+name: Close Release Branch
 on:
   workflow_dispatch:
     branches:
-      - main
-    inputs:
-      VersionUpType:
-        description: "Version Up Type"
-        default: Minor
-        type: choice
-        required: true
-        options:
-          - Major
-          - Minor
-          - Patch
+      - "releases/**"
 jobs:
-  CreateRelease:
+  CloseReleaseBranch:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -23,30 +13,34 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
+          git pull
           git fetch --prune --unshallow
       - name: Determine Next Version Name
+        env:
+          CURRENT_BRANCH: ${{ github.ref_name }}
         run: |
-          CURRENT_VERSION=`git describe --tags --abbrev=0`
-          VERSION_UP_TYPE=${{ github.event.inputs.VersionUpType }}
-          VERSION_ELEMENTS=( ${CURRENT_VERSION//[.|-]/ } )
-
-          if [ $VERSION_UP_TYPE = "Major" ]; then
-            NEXT_VERSION=$((VERSION_ELEMENTS[0]+1)).0.0
-          elif [ $VERSION_UP_TYPE = "Minor" ]; then
-            NEXT_VERSION=$((VERSION_ELEMENTS[0])).$((VERSION_ELEMENTS[1]+1)).0
-          elif [ $VERSION_UP_TYPE = "Patch" ]; then
-            NEXT_VERSION=$((VERSION_ELEMENTS[0])).$((VERSION_ELEMENTS[1])).$((VERSION_ELEMENTS[2]+1))
-          fi
-
-          echo "Current version is $CURRENT_VERSION"
-          echo "Next version is $NEXT_VERSION"
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
+          NEXT_VERSION=`echo $CURRENT_BRANCH | tr -d release/ | tr -d hotfix/`
           echo "next_version=$NEXT_VERSION" >> $GITHUB_ENV
-      - name: Create Release Branch
-        run: git checkout -b release/${{ env.next_version }}
-      - name: Replace Version Name And Commit
+      - name: Merge Production And Main Branch
+        env:
+          CURRENT_BRANCH: ${{ github.ref_name }}
+          NEXT_VERSION: ${{ env.next_version }}
         run: |
-          sed -i'' -e 's/^version: ${{ env.current_version }}$/version: ${{ env.next_version }}/' ./version.txt
-          git add version.txt
-          git commit -m "Generate New Release Branch release/${{ env.next_version }}"
-          git push origin release/${{ env.next_version }}
+          TODAY=`date '+%Y/%m/%d'`
+          CURRENT_BRANCH=${{ github.ref_name }}
+          git tag -a $NEXT_VERSION -m "close $CURRENT_BRANCH with tag:$NEXT_VERSION at $TODAY"
+
+          # production branch
+          git switch production
+          git merge $CURRENT_BRANCH --no-ff --no-edit
+          git push
+
+          # main branch
+          git switch main
+          git merge $CURRENT_BRANCH --no-ff --no-edit
+          git push
+      - name: Change Version Name And Commit
+        env:
+          CURRENT_BRANCH: ${{ github.ref_name }}
+        run: |
+          git push --delete origin $CURRENT_BRANCH --quiet
