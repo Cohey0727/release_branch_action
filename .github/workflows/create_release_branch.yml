@@ -51,7 +51,7 @@ jobs:
           ls
           echo Hello0
           cat version.txt
-          sed -i '' -e 's/^version\:\ 1.0.1$/version\:\ 1.5.0/' ./version.txt
+          sed -i '' -e 's/^version\:\ 1.0.1$/version\:\ 1.5.0/' version.txt
           echo Hello1
           sed -i '' -e "s/^version: 1.0.1$/version: 1.5.0/" ./version.txt
           echo Hello2
