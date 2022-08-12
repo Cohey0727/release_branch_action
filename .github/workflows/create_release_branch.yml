@@ -48,6 +48,7 @@ jobs:
         run: |
           # CURRENT_VERSION=${{ env.current_version }}
           # NEXT_VERSION=${{ env.next_version }}
+          ls
           sed -i '' -e "s/^version: ${{ env.current_version }}$/version: ${{ env.next_version }}/" version.txt
           git add version.txt
           git commit -m "Generate New Release Branch release/{{ env.next_version }}"
