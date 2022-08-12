@@ -14,7 +14,7 @@ on:
           - Minor
           - Patch
 jobs:
-  CreateRelease:
+  CreateReleaseBranch:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code

@@ -1,20 +1,7 @@
 name: Create Release Branch
-on:
-  workflow_dispatch:
-    branches:
-      - main
-    inputs:
-      VersionUpType:
-        description: "Version Up Type"
-        default: Minor
-        type: choice
-        required: true
-        options:
-          - Major
-          - Minor
-          - Patch
+on: workflow_dispatch
 jobs:
-  CreateRelease:
+  CloseReleaseBranch:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -27,26 +14,19 @@ jobs:
           git fetch --prune --unshallow
       - name: Determine Next Version Name
         run: |
-          CURRENT_VERSION=`git describe --tags --abbrev=0`
-          VERSION_UP_TYPE=${{ github.event.inputs.VersionUpType }}
-          VERSION_ELEMENTS=( ${CURRENT_VERSION//[.|-]/ } )
-
-          if [ $VERSION_UP_TYPE = "Major" ]; then
-            NEXT_VERSION=$((VERSION_ELEMENTS[0]+1)).0.0
-          elif [ $VERSION_UP_TYPE = "Minor" ]; then
-            NEXT_VERSION=$((VERSION_ELEMENTS[0])).$((VERSION_ELEMENTS[1]+1)).0
-          elif [ $VERSION_UP_TYPE = "Patch" ]; then
-            NEXT_VERSION=$((VERSION_ELEMENTS[0])).$((VERSION_ELEMENTS[1])).$((VERSION_ELEMENTS[2]+1))
-          fi
-
-          echo "Current version is $CURRENT_VERSION"
-          echo "Next version is $NEXT_VERSION"
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
-          echo "next_version=$NEXT_VERSION" >> $GITHUB_ENV
+          CURRENT_BRANCH=`git symbolic-ref --short HEAD`
+          NEXT_VERSION=`echo $CURRENT_BRANCH | tr -d release/ | tr -d hotfix/`
       - name: Change Version Name And Commit
         run: |
-          git checkout -b release/${{ env.next_version }}
-          sed -i'' -e 's/^version: ${{ env.current_version }}$/version: ${{ env.next_version }}/' ./version.txt
-          git add version.txt
-          git commit -m "Generate New Release Branch release/${{ env.next_version }}"
-          git push origin release/${{ env.next_version }}
+          TODAY=`date '+%Y/%m/%d'`
+          git tag -a $NEXT_VERSION -m "close $CURRENT_BRANCH with tag:$NEXT_VERSION at $TODAY"
+
+          # production branch
+          git checkout origin/production
+          git merge $CURRENT_BRANCH --no-ff --no-edit
+          git push origin/production
+
+          # main branch
+          git checkout origin/main
+          git merge $CURRENT_BRANCH --no-ff --no-edit
+          git push origin/main
