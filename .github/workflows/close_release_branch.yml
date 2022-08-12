@@ -1,5 +1,8 @@
 name: Close Release Branch
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    branches:
+      - "releases/**"
 jobs:
   CloseReleaseBranch:
     runs-on: ubuntu-latest
