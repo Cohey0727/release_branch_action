@@ -44,9 +44,10 @@ jobs:
           echo "next_version=$NEXT_VERSION" >> $GITHUB_ENV
       - name: Create Release Branch
         run: git checkout -b release/${{ env.next_version }}
-      - name: Replace Version Name And Commit
+      - name: Override Version
         run: |
           sed -i'' -e 's/^version: ${{ env.current_version }}$/version: ${{ env.next_version }}/' ./version.txt
+      - name: Commit
           git add version.txt
           git commit -m "Generate New Release Branch release/${{ env.next_version }}"
           git push origin release/${{ env.next_version }}
