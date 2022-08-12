@@ -26,7 +26,6 @@ jobs:
         run: |
           TODAY=`date '+%Y/%m/%d'`
           CURRENT_BRANCH=${{ github.ref_name }}
-          NEXT_VERSION= ${{ env.next_version }}
           git tag -a $NEXT_VERSION -m "close $CURRENT_BRANCH with tag:$NEXT_VERSION at $TODAY"
 
           # production branch
