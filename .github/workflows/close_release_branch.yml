@@ -16,12 +16,14 @@ jobs:
           git pull
           git fetch --prune --unshallow
       - name: Determine Next Version Name
+        env:
+          CURRENT_BRANCH: ${{ github.ref_name }}
         run: |
-          CURRENT_BRANCH=${{ github.ref_name }}
           NEXT_VERSION=`echo $CURRENT_BRANCH | tr -d release/ | tr -d hotfix/`
           echo "next_version=$NEXT_VERSION" >> $GITHUB_ENV
-      - name: Change Version Name And Commit
+      - name: Merge Production And Main Branch
         env:
+          CURRENT_BRANCH: ${{ github.ref_name }}
           NEXT_VERSION: ${{ env.next_version }}
         run: |
           TODAY=`date '+%Y/%m/%d'`
@@ -37,3 +39,8 @@ jobs:
           git checkout origin/main
           git merge $CURRENT_BRANCH --no-ff --no-edit
           git push origin/main
+      - name: Change Version Name And Commit
+        env:
+          CURRENT_BRANCH: ${{ github.ref_name }}
+        run: |
+          git push --delete origin $CURRENT_BRANCH --quiet
