@@ -29,6 +29,7 @@ jobs:
           TODAY=`date '+%Y/%m/%d'`
           CURRENT_BRANCH=${{ github.ref_name }}
           git tag -a $NEXT_VERSION -m "close $CURRENT_BRANCH with tag:$NEXT_VERSION at $TODAY"
+          git push origin --tags
 
           # production branch
           git switch production
@@ -39,7 +40,7 @@ jobs:
           git switch main
           git merge $CURRENT_BRANCH --no-ff --no-edit
           git push
-      - name: Change Version Name And Commit
+      - name: Delete Release Branch
         env:
           CURRENT_BRANCH: ${{ github.ref_name }}
         run: |
