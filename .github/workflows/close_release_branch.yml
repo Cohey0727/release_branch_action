@@ -31,14 +31,14 @@ jobs:
           git tag -a $NEXT_VERSION -m "close $CURRENT_BRANCH with tag:$NEXT_VERSION at $TODAY"
 
           # production branch
-          git checkout origin/production
+          git switch production
           git merge $CURRENT_BRANCH --no-ff --no-edit
-          git push origin/production
+          git push
 
           # main branch
-          git checkout origin/main
+          git switch main
           git merge $CURRENT_BRANCH --no-ff --no-edit
-          git push origin/main
+          git push
       - name: Change Version Name And Commit
         env:
           CURRENT_BRANCH: ${{ github.ref_name }}
