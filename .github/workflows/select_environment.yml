@@ -13,6 +13,7 @@ jobs:
       - name: Show Env
         env:
           ENV_TEST: ${{ secrets.ENV_TEST }}
+          YOUR_SECRET_NAME: ${{ secrets.YOUR_SECRET_NAME }}
         run: |
           echo CI=$CI
           echo GITHUB_ACTION=$GITHUB_ACTION
@@ -39,3 +40,5 @@ jobs:
           echo RUNNER_TOOL_CACHE=$RUNNER_TOOL_CACHE
           echo ENV_TEST=$ENV_TEST
           echo ENV_TEST=${{ secrets.ENV_TEST }}
+          echo YOUR_SECRET_NAME=${{ secrets.YOUR_SECRET_NAME }}
+          echo YOUR_SECRET_NAME=$YOUR_SECRET_NAME
