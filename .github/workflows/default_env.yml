@@ -1,4 +1,4 @@
-name: Create Release Branch
+name: Default Env
 on: workflow_dispatch
 jobs:
   CreateReleaseBranch:
